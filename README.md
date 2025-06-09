@@ -111,4 +111,4 @@ bookshelf-api/
 Kontribusi sangat terbuka!
 Buka issue untuk bug, atau kirim pull request untuk perbaikan dan fitur tambahan.
 
-<p align="center"> Dibuat dengan ❤️ oleh Kamal </p>
+<p align="center"> Dibuat dengan ❤️ oleh Kamaldev10 </p>
