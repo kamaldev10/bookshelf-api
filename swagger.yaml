@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: Book Shelf API
+  description: API untuk mengelola koleksi buku menggunakan Node.js dan Hapi.js
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:9000
+    description: Local development server
+
+paths:
+  /books:
+    post:
+      summary: Tambahkan buku baru
+      tags: [Books]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookPayload"
+      responses:
+        "201":
+          description: Buku berhasil ditambahkan
+        "400":
+          description: Validasi gagal (nama kosong atau readPage > pageCount)
+        "500":
+          description: Gagal menambahkan buku
+
+    get:
+      summary: Ambil daftar semua buku
+      tags: [Books]
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Filter berdasarkan nama
+        - in: query
+          name: reading
+          schema:
+            type: integer
+            enum: [0, 1]
+          description: Filter sedang dibaca
+        - in: query
+          name: finished
+          schema:
+            type: integer
+            enum: [0, 1]
+          description: Filter selesai dibaca
+      responses:
+        "200":
+          description: Daftar buku dikembalikan
+
+  /books/{bookId}:
+    get:
+      summary: Ambil detail buku berdasarkan ID
+      tags: [Books]
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Detail buku berhasil ditemukan
+        "404":
+          description: Buku tidak ditemukan
+
+    put:
+      summary: Perbarui data buku berdasarkan ID
+      tags: [Books]
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookPayload"
+      responses:
+        "200":
+          description: Buku berhasil diperbarui
+        "400":
+          description: Validasi gagal
+        "404":
+          description: ID tidak ditemukan
+
+    delete:
+      summary: Hapus buku berdasarkan ID
+      tags: [Books]
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Buku berhasil dihapus
+        "404":
+          description: Buku gagal dihapus. ID tidak ditemukan
+
+components:
+  schemas:
+    BookPayload:
+      type: object
+      required:
+        - name
+        - year
+        - author
+        - summary
+        - publisher
+        - pageCount
+        - readPage
+        - reading
+      properties:
+        name:
+          type: string
+          example: "Atomic Habits"
+        year:
+          type: integer
+          example: 2018
+        author:
+          type: string
+          example: "James Clear"
+        summary:
+          type: string
+          example: "Panduan membangun kebiasaan positif"
+        publisher:
+          type: string
+          example: "Penguin"
+        pageCount:
+          type: integer
+          example: 320
+        readPage:
+          type: integer
+          example: 100
+        reading:
+          type: boolean
+          example: true
